@@ -1,40 +1,38 @@
 # Getting Started
 
-Two paths to building your personal context portfolio. Pick whichever fits.
+Two systems. Build them in order — portfolio first, then wiki.
 
 ---
 
-## Path 1: Use the Web App
+## Step 1: Build Your Portfolio
 
-The fastest way. A purpose-built interviewer agent handles the whole process.
+Your portfolio is the foundation. It tells the wiki who it's being built for.
+
+### Option A: Use the Web App
+
+A purpose-built interviewer agent handles the whole process.
 
 1. Go to [app URL].
 2. Sign in with your email (magic link, no password needed).
-3. The agent introduces itself and starts the interview.
-4. It works through all ten files in sequence — asking you questions, drafting each file, and asking you to correct what it got wrong.
-5. You can stop after any file and come back later. It picks up where you left off.
-6. When you're done, download your complete portfolio as a zip.
+3. The agent interviews you across all ten files in sequence.
+4. Download your complete portfolio as a zip when done.
+5. Drop the files into `portfolio/` in this repo.
 
-The whole thing takes 30-60 minutes if you do it in one sitting. Most people spread it across a few sessions.
+The whole thing takes 30-60 minutes in one sitting. Most people spread it across a few sessions.
 
----
+### Option B: Do It Yourself
 
-## Path 2: Do It Yourself
+1. Open any template file from `portfolio/templates/`.
+2. Paste the entire file to Claude or ChatGPT.
+3. Say "let's do this one."
+4. Your AI build partner reads the embedded interview protocol and starts asking questions.
+5. When it has enough, it drafts the file. Read it and correct what's wrong.
+6. Save the final version into `portfolio/` (or a subdirectory of your choosing).
+7. Repeat for the remaining templates.
 
-Fork this repo and work through the templates with your own AI build partner (Claude, ChatGPT, or whatever you use).
+**Recommended order:** Start with `identity.md` and `role-and-responsibilities.md` — everything else builds on those two.
 
-1. Fork or clone this repo.
-2. Open any template file from `/templates`.
-3. Copy the entire file and paste it to your AI build partner.
-4. Say "let's do this one."
-5. Your build partner will read the interview protocol embedded in the template and start asking you questions.
-6. When it has enough, it'll draft the file. Read the draft and tell it what's wrong.
-7. Save the final version. Move to the next template.
-
-**Recommended order:** Start with `identity.md` and `role-and-responsibilities.md`. Everything else builds on those two. After that, the order matters less — go with whatever feels most relevant to your work right now.
-
-**Suggested full sequence:**
-
+**Full sequence:**
 1. `identity.md`
 2. `role-and-responsibilities.md`
 3. `current-projects.md`
@@ -46,27 +44,50 @@ Fork this repo and work through the templates with your own AI build partner (Cl
 9. `domain-knowledge.md`
 10. `decision-log.md`
 
----
-
-## After You Build It
-
-Your portfolio is a set of markdown files. That's the point — they're portable. But they don't do anything until you wire them into the tools you actually use.
-
-The `/wiring` directory has guides for:
-
-- Exposing your portfolio as an MCP resource
-- Using it in Claude Projects
-- Connecting it to OpenClaw agents
-- Copy-paste patterns for system prompts
-- Building an API layer
-
-This is the part that turns your portfolio from "a nice set of documents" into actual infrastructure. Start with whatever tool you use most.
+**Tips:**
+- Be specific, not aspirational. Your agents need ground truth, not how you wish you worked.
+- Don't skip the reaction pass. When your build partner drafts a file, read it and correct what it got wrong. That's where the real signal is.
+- Short is better than long. One page per file, not five. Dense context beats sprawling context.
 
 ---
 
-## Tips
+## Step 2: Set Up the Wiki
 
-- **Be specific, not aspirational.** The portfolio should describe how you actually work, not how you wish you worked. Your agents need ground truth.
-- **Don't skip the reaction pass.** When your build partner drafts a file, read it and find what's wrong. The corrections are where the real signal is. A rubber-stamped draft is a mediocre file.
-- **Short is better than long.** A good context file is one page, not five. Agents perform better with dense, high-signal context than with sprawling documents.
-- **Update regularly.** Projects change, priorities shift, you learn new tools. A portfolio that's six months stale is worse than no portfolio — it gives your agents confident but wrong context.
+Open a new Claude Code session in this repo and say:
+
+> "Read CLAUDE.md, then read my portfolio files in portfolio/. You are my LLM wiki agent. Confirm you understand the ingest, query, and lint workflows, and tell me what you need to ingest the first source."
+
+Then drop your first source into `raw/` and say "ingest this."
+
+That's it. The LLM reads the source, creates wiki pages, updates the index, and appends to the log. Drop in another source when you have one.
+
+**What makes a good first source:**
+- Something you've already read and found valuable
+- An article, transcript, meeting notes, or research paper
+- Text-based (PDFs work; images need the LLM to handle them separately)
+
+**After the first ingest:** Open Obsidian on this folder. The graph view shows you what got created and how it connects.
+
+---
+
+## Step 3: Wire It In
+
+The wiki and portfolio are most useful when they're accessible to your other AI tools — not just Claude Code sessions on this repo.
+
+See the `wiring/` directory for:
+- **`mcp-resource.md`** — expose both layers as MCP resources (most automated)
+- **`system-prompt-patterns.md`** — copy-paste patterns for Claude, ChatGPT, Gemini
+- **`claude-projects.md`** — use your portfolio in Claude Projects
+- **`api-layer.md`** — build an API layer if you want programmatic access
+
+Start with whichever tool you use most.
+
+---
+
+## Ongoing Maintenance
+
+**Portfolio:** Review quarterly or when something significant changes (new job, new projects, major priority shift). Ask Claude Code: "Help me update current-projects.md — here's what's changed."
+
+**Wiki:** Add sources whenever you read something worth keeping. Run a lint pass monthly: "Health-check the wiki — look for contradictions, orphan pages, stale claims, and missing cross-references."
+
+**Log:** Use `grep "^## \[" log.md | tail -10` to see recent activity.
